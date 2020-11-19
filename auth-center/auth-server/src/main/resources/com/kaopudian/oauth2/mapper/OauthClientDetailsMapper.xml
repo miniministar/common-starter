@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exercise.oauth2.mapper.OauthClientDetailsMapper">
+  <resultMap id="BaseResultMap" type="com.exercise.oauth2.model.OauthClientDetails">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="client_id" jdbcType="VARCHAR" property="clientId" />
+    <result column="client_name" jdbcType="VARCHAR" property="clientName" />
+    <result column="resource_ids" jdbcType="VARCHAR" property="resourceIds" />
+    <result column="client_secret" jdbcType="VARCHAR" property="clientSecret" />
+    <result column="client_secret_str" jdbcType="VARCHAR" property="clientSecretStr" />
+    <result column="scope" jdbcType="VARCHAR" property="scope" />
+    <result column="authorized_grant_types" jdbcType="VARCHAR" property="authorizedGrantTypes" />
+    <result column="web_server_redirect_uri" jdbcType="VARCHAR" property="webServerRedirectUri" />
+    <result column="authorities" jdbcType="VARCHAR" property="authorities" />
+    <result column="access_token_validity" jdbcType="INTEGER" property="accessTokenValidity" />
+    <result column="refresh_token_validity" jdbcType="INTEGER" property="refreshTokenValidity" />
+    <result column="additional_information" jdbcType="VARCHAR" property="additionalInformation" />
+    <result column="autoapprove" jdbcType="VARCHAR" property="autoapprove" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="if_limit" jdbcType="INTEGER" property="ifLimit" />
+    <result column="limit_count" jdbcType="INTEGER" property="limitCount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, client_id, client_name, resource_ids, client_secret, client_secret_str, scope, 
+    authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, 
+    refresh_token_validity, additional_information, autoapprove, status, if_limit, limit_count, 
+    create_time, modify_time
+  </sql>
+  <select id="selectByExample" parameterType="com.exercise.oauth2.model.OauthClientDetailsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from oauth_client_details
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oauth_client_details
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from oauth_client_details
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.exercise.oauth2.model.OauthClientDetailsExample">
+    delete from oauth_client_details
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.exercise.oauth2.model.OauthClientDetails">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into oauth_client_details (client_id, client_name, resource_ids, 
+      client_secret, client_secret_str, scope, 
+      authorized_grant_types, web_server_redirect_uri, 
+      authorities, access_token_validity, refresh_token_validity, 
+      additional_information, autoapprove, status, 
+      if_limit, limit_count, create_time, 
+      modify_time)
+    values (#{clientId,jdbcType=VARCHAR}, #{clientName,jdbcType=VARCHAR}, #{resourceIds,jdbcType=VARCHAR}, 
+      #{clientSecret,jdbcType=VARCHAR}, #{clientSecretStr,jdbcType=VARCHAR}, #{scope,jdbcType=VARCHAR}, 
+      #{authorizedGrantTypes,jdbcType=VARCHAR}, #{webServerRedirectUri,jdbcType=VARCHAR}, 
+      #{authorities,jdbcType=VARCHAR}, #{accessTokenValidity,jdbcType=INTEGER}, #{refreshTokenValidity,jdbcType=INTEGER}, 
+      #{additionalInformation,jdbcType=VARCHAR}, #{autoapprove,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{ifLimit,jdbcType=INTEGER}, #{limitCount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.exercise.oauth2.model.OauthClientDetails">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into oauth_client_details
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clientId != null">
+        client_id,
+      </if>
+      <if test="clientName != null">
+        client_name,
+      </if>
+      <if test="resourceIds != null">
+        resource_ids,
+      </if>
+      <if test="clientSecret != null">
+        client_secret,
+      </if>
+      <if test="clientSecretStr != null">
+        client_secret_str,
+      </if>
+      <if test="scope != null">
+        scope,
+      </if>
+      <if test="authorizedGrantTypes != null">
+        authorized_grant_types,
+      </if>
+      <if test="webServerRedirectUri != null">
+        web_server_redirect_uri,
+      </if>
+      <if test="authorities != null">
+        authorities,
+      </if>
+      <if test="accessTokenValidity != null">
+        access_token_validity,
+      </if>
+      <if test="refreshTokenValidity != null">
+        refresh_token_validity,
+      </if>
+      <if test="additionalInformation != null">
+        additional_information,
+      </if>
+      <if test="autoapprove != null">
+        autoapprove,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="ifLimit != null">
+        if_limit,
+      </if>
+      <if test="limitCount != null">
+        limit_count,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clientId != null">
+        #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="clientName != null">
+        #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceIds != null">
+        #{resourceIds,jdbcType=VARCHAR},
+      </if>
+      <if test="clientSecret != null">
+        #{clientSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="clientSecretStr != null">
+        #{clientSecretStr,jdbcType=VARCHAR},
+      </if>
+      <if test="scope != null">
+        #{scope,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizedGrantTypes != null">
+        #{authorizedGrantTypes,jdbcType=VARCHAR},
+      </if>
+      <if test="webServerRedirectUri != null">
+        #{webServerRedirectUri,jdbcType=VARCHAR},
+      </if>
+      <if test="authorities != null">
+        #{authorities,jdbcType=VARCHAR},
+      </if>
+      <if test="accessTokenValidity != null">
+        #{accessTokenValidity,jdbcType=INTEGER},
+      </if>
+      <if test="refreshTokenValidity != null">
+        #{refreshTokenValidity,jdbcType=INTEGER},
+      </if>
+      <if test="additionalInformation != null">
+        #{additionalInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="autoapprove != null">
+        #{autoapprove,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="ifLimit != null">
+        #{ifLimit,jdbcType=INTEGER},
+      </if>
+      <if test="limitCount != null">
+        #{limitCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.exercise.oauth2.model.OauthClientDetailsExample" resultType="java.lang.Long">
+    select count(*) from oauth_client_details
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update oauth_client_details
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.clientId != null">
+        client_id = #{record.clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clientName != null">
+        client_name = #{record.clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resourceIds != null">
+        resource_ids = #{record.resourceIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clientSecret != null">
+        client_secret = #{record.clientSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clientSecretStr != null">
+        client_secret_str = #{record.clientSecretStr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scope != null">
+        scope = #{record.scope,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authorizedGrantTypes != null">
+        authorized_grant_types = #{record.authorizedGrantTypes,jdbcType=VARCHAR},
+      </if>
+      <if test="record.webServerRedirectUri != null">
+        web_server_redirect_uri = #{record.webServerRedirectUri,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authorities != null">
+        authorities = #{record.authorities,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accessTokenValidity != null">
+        access_token_validity = #{record.accessTokenValidity,jdbcType=INTEGER},
+      </if>
+      <if test="record.refreshTokenValidity != null">
+        refresh_token_validity = #{record.refreshTokenValidity,jdbcType=INTEGER},
+      </if>
+      <if test="record.additionalInformation != null">
+        additional_information = #{record.additionalInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.autoapprove != null">
+        autoapprove = #{record.autoapprove,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.ifLimit != null">
+        if_limit = #{record.ifLimit,jdbcType=INTEGER},
+      </if>
+      <if test="record.limitCount != null">
+        limit_count = #{record.limitCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyTime != null">
+        modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update oauth_client_details
+    set id = #{record.id,jdbcType=BIGINT},
+      client_id = #{record.clientId,jdbcType=VARCHAR},
+      client_name = #{record.clientName,jdbcType=VARCHAR},
+      resource_ids = #{record.resourceIds,jdbcType=VARCHAR},
+      client_secret = #{record.clientSecret,jdbcType=VARCHAR},
+      client_secret_str = #{record.clientSecretStr,jdbcType=VARCHAR},
+      scope = #{record.scope,jdbcType=VARCHAR},
+      authorized_grant_types = #{record.authorizedGrantTypes,jdbcType=VARCHAR},
+      web_server_redirect_uri = #{record.webServerRedirectUri,jdbcType=VARCHAR},
+      authorities = #{record.authorities,jdbcType=VARCHAR},
+      access_token_validity = #{record.accessTokenValidity,jdbcType=INTEGER},
+      refresh_token_validity = #{record.refreshTokenValidity,jdbcType=INTEGER},
+      additional_information = #{record.additionalInformation,jdbcType=VARCHAR},
+      autoapprove = #{record.autoapprove,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      if_limit = #{record.ifLimit,jdbcType=INTEGER},
+      limit_count = #{record.limitCount,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.exercise.oauth2.model.OauthClientDetails">
+    update oauth_client_details
+    <set>
+      <if test="clientId != null">
+        client_id = #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="clientName != null">
+        client_name = #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceIds != null">
+        resource_ids = #{resourceIds,jdbcType=VARCHAR},
+      </if>
+      <if test="clientSecret != null">
+        client_secret = #{clientSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="clientSecretStr != null">
+        client_secret_str = #{clientSecretStr,jdbcType=VARCHAR},
+      </if>
+      <if test="scope != null">
+        scope = #{scope,jdbcType=VARCHAR},
+      </if>
+      <if test="authorizedGrantTypes != null">
+        authorized_grant_types = #{authorizedGrantTypes,jdbcType=VARCHAR},
+      </if>
+      <if test="webServerRedirectUri != null">
+        web_server_redirect_uri = #{webServerRedirectUri,jdbcType=VARCHAR},
+      </if>
+      <if test="authorities != null">
+        authorities = #{authorities,jdbcType=VARCHAR},
+      </if>
+      <if test="accessTokenValidity != null">
+        access_token_validity = #{accessTokenValidity,jdbcType=INTEGER},
+      </if>
+      <if test="refreshTokenValidity != null">
+        refresh_token_validity = #{refreshTokenValidity,jdbcType=INTEGER},
+      </if>
+      <if test="additionalInformation != null">
+        additional_information = #{additionalInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="autoapprove != null">
+        autoapprove = #{autoapprove,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="ifLimit != null">
+        if_limit = #{ifLimit,jdbcType=INTEGER},
+      </if>
+      <if test="limitCount != null">
+        limit_count = #{limitCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.exercise.oauth2.model.OauthClientDetails">
+    update oauth_client_details
+    set client_id = #{clientId,jdbcType=VARCHAR},
+      client_name = #{clientName,jdbcType=VARCHAR},
+      resource_ids = #{resourceIds,jdbcType=VARCHAR},
+      client_secret = #{clientSecret,jdbcType=VARCHAR},
+      client_secret_str = #{clientSecretStr,jdbcType=VARCHAR},
+      scope = #{scope,jdbcType=VARCHAR},
+      authorized_grant_types = #{authorizedGrantTypes,jdbcType=VARCHAR},
+      web_server_redirect_uri = #{webServerRedirectUri,jdbcType=VARCHAR},
+      authorities = #{authorities,jdbcType=VARCHAR},
+      access_token_validity = #{accessTokenValidity,jdbcType=INTEGER},
+      refresh_token_validity = #{refreshTokenValidity,jdbcType=INTEGER},
+      additional_information = #{additionalInformation,jdbcType=VARCHAR},
+      autoapprove = #{autoapprove,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      if_limit = #{ifLimit,jdbcType=INTEGER},
+      limit_count = #{limitCount,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exercise.oauth2.mapper.OauthApprovalsMapper">
+  <resultMap id="BaseResultMap" type="com.exercise.oauth2.model.OauthApprovals">
+    <result column="userId" jdbcType="VARCHAR" property="userid" />
+    <result column="clientId" jdbcType="VARCHAR" property="clientid" />
+    <result column="scope" jdbcType="VARCHAR" property="scope" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="expiresAt" jdbcType="TIMESTAMP" property="expiresat" />
+    <result column="lastModifiedAt" jdbcType="TIMESTAMP" property="lastmodifiedat" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    userId, clientId, scope, status, expiresAt, lastModifiedAt
+  </sql>
+  <select id="selectByExample" parameterType="com.exercise.oauth2.model.OauthApprovalsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from oauth_approvals
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.exercise.oauth2.model.OauthApprovalsExample">
+    delete from oauth_approvals
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.exercise.oauth2.model.OauthApprovals">
+    insert into oauth_approvals (userId, clientId, scope, 
+      status, expiresAt, lastModifiedAt
+      )
+    values (#{userid,jdbcType=VARCHAR}, #{clientid,jdbcType=VARCHAR}, #{scope,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{expiresat,jdbcType=TIMESTAMP}, #{lastmodifiedat,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.exercise.oauth2.model.OauthApprovals">
+    insert into oauth_approvals
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="clientid != null">
+        clientId,
+      </if>
+      <if test="scope != null">
+        scope,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="expiresat != null">
+        expiresAt,
+      </if>
+      <if test="lastmodifiedat != null">
+        lastModifiedAt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="clientid != null">
+        #{clientid,jdbcType=VARCHAR},
+      </if>
+      <if test="scope != null">
+        #{scope,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresat != null">
+        #{expiresat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastmodifiedat != null">
+        #{lastmodifiedat,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.exercise.oauth2.model.OauthApprovalsExample" resultType="java.lang.Long">
+    select count(*) from oauth_approvals
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update oauth_approvals
+    <set>
+      <if test="record.userid != null">
+        userId = #{record.userid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clientid != null">
+        clientId = #{record.clientid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scope != null">
+        scope = #{record.scope,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.expiresat != null">
+        expiresAt = #{record.expiresat,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastmodifiedat != null">
+        lastModifiedAt = #{record.lastmodifiedat,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update oauth_approvals
+    set userId = #{record.userid,jdbcType=VARCHAR},
+      clientId = #{record.clientid,jdbcType=VARCHAR},
+      scope = #{record.scope,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      expiresAt = #{record.expiresat,jdbcType=TIMESTAMP},
+      lastModifiedAt = #{record.lastmodifiedat,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

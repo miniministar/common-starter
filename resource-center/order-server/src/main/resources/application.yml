@@ -1,0 +1,12 @@
+server:
+  port: 8105
+
+spring:
+  application:
+    name: order-server
+
+project:
+  #资源标识
+  resourceId: order-server
+  #授权标识
+  scope: ROLE_API

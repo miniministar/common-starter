@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exercise.oauth2.mapper.OauthClientTokenMapper">
+  <resultMap id="BaseResultMap" type="com.exercise.oauth2.model.OauthClientToken">
+    <id column="authentication_id" jdbcType="VARCHAR" property="authenticationId" />
+    <result column="token_id" jdbcType="VARCHAR" property="tokenId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="client_id" jdbcType="VARCHAR" property="clientId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.exercise.oauth2.model.OauthClientToken">
+    <result column="token" jdbcType="LONGVARBINARY" property="token" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    authentication_id, token_id, user_name, client_id
+  </sql>
+  <sql id="Blob_Column_List">
+    token
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.exercise.oauth2.model.OauthClientTokenExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from oauth_client_token
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.exercise.oauth2.model.OauthClientTokenExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from oauth_client_token
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from oauth_client_token
+    where authentication_id = #{authenticationId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from oauth_client_token
+    where authentication_id = #{authenticationId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.exercise.oauth2.model.OauthClientTokenExample">
+    delete from oauth_client_token
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.exercise.oauth2.model.OauthClientToken">
+    insert into oauth_client_token (authentication_id, token_id, user_name, 
+      client_id, token)
+    values (#{authenticationId,jdbcType=VARCHAR}, #{tokenId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{clientId,jdbcType=VARCHAR}, #{token,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.exercise.oauth2.model.OauthClientToken">
+    insert into oauth_client_token
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="authenticationId != null">
+        authentication_id,
+      </if>
+      <if test="tokenId != null">
+        token_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="clientId != null">
+        client_id,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="authenticationId != null">
+        #{authenticationId,jdbcType=VARCHAR},
+      </if>
+      <if test="tokenId != null">
+        #{tokenId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientId != null">
+        #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.exercise.oauth2.model.OauthClientTokenExample" resultType="java.lang.Long">
+    select count(*) from oauth_client_token
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update oauth_client_token
+    <set>
+      <if test="record.authenticationId != null">
+        authentication_id = #{record.authenticationId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tokenId != null">
+        token_id = #{record.tokenId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userName != null">
+        user_name = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clientId != null">
+        client_id = #{record.clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.token != null">
+        token = #{record.token,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update oauth_client_token
+    set authentication_id = #{record.authenticationId,jdbcType=VARCHAR},
+      token_id = #{record.tokenId,jdbcType=VARCHAR},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      client_id = #{record.clientId,jdbcType=VARCHAR},
+      token = #{record.token,jdbcType=LONGVARBINARY}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update oauth_client_token
+    set authentication_id = #{record.authenticationId,jdbcType=VARCHAR},
+      token_id = #{record.tokenId,jdbcType=VARCHAR},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      client_id = #{record.clientId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.exercise.oauth2.model.OauthClientToken">
+    update oauth_client_token
+    <set>
+      <if test="tokenId != null">
+        token_id = #{tokenId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientId != null">
+        client_id = #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        token = #{token,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where authentication_id = #{authenticationId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.exercise.oauth2.model.OauthClientToken">
+    update oauth_client_token
+    set token_id = #{tokenId,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      client_id = #{clientId,jdbcType=VARCHAR},
+      token = #{token,jdbcType=LONGVARBINARY}
+    where authentication_id = #{authenticationId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.exercise.oauth2.model.OauthClientToken">
+    update oauth_client_token
+    set token_id = #{tokenId,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      client_id = #{clientId,jdbcType=VARCHAR}
+    where authentication_id = #{authenticationId,jdbcType=VARCHAR}
+  </update>
+</mapper>

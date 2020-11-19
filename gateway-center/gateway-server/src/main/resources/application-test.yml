@@ -1,0 +1,25 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        # 路由标识（id：标识，具有唯一性）   简单尝试
+        - id: auth-server
+          uri: http://localhost:8111
+          order: 8104
+          predicates:
+            - Path=/auth/**
+          filters:
+            - RewritePath=/auth(?<segment>/?.*), /auth-server/$\{segment}
+        # 路由标识（id：标识，具有唯一性）   简单尝试
+        - id: satellite-admin
+          uri: http://localhost:8111
+          order: 8111
+          predicates:
+            - Path=/satellite-admin/**
+          filters:
+            - RewritePath=/satellite-admin(?<segment>/?.*), /satellite-admin/$\{segment}
+
+logging:
+  level:
+    # log 级别
+    com.exercise: info

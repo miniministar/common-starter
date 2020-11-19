@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        # 路由标识（id：标识，具有唯一性）   简单尝试
+        - id: auth-server
+          uri: http://localhost:8104
+          order: 8104
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+        - id: order-server
+          uri: http://localhost:8105
+          order: 8105
+          predicates:
+            - Path=/order/**
+          filters:
+            - StripPrefix=1
+
+logging:
+  level:
+    # log 级别
+    com.exercise: debug

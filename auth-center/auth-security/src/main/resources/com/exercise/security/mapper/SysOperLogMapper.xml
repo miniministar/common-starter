@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exercise.security.mapper.SysOperLogMapper">
+  <resultMap id="BaseResultMap" type="com.exercise.security.model.SysOperLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="business_type" jdbcType="INTEGER" property="businessType" />
+    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
+    <result column="request_method" jdbcType="VARCHAR" property="requestMethod" />
+    <result column="operator_type" jdbcType="INTEGER" property="operatorType" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="user_real_name" jdbcType="VARCHAR" property="userRealName" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="oper_url" jdbcType="VARCHAR" property="operUrl" />
+    <result column="oper_ip" jdbcType="VARCHAR" property="operIp" />
+    <result column="oper_location" jdbcType="VARCHAR" property="operLocation" />
+    <result column="oper_param" jdbcType="VARCHAR" property="operParam" />
+    <result column="json_result" jdbcType="VARCHAR" property="jsonResult" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="error_msg" jdbcType="VARCHAR" property="errorMsg" />
+    <result column="oper_time" jdbcType="TIMESTAMP" property="operTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, title, business_type, method_name, request_method, operator_type, username, user_real_name, 
+    dept_name, oper_url, oper_ip, oper_location, oper_param, json_result, status, error_msg, 
+    oper_time
+  </sql>
+  <select id="selectByExample" parameterType="com.exercise.security.model.SysOperLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_oper_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_oper_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_oper_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.exercise.security.model.SysOperLogExample">
+    delete from sys_oper_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.exercise.security.model.SysOperLog">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sys_oper_log (title, business_type, method_name, 
+      request_method, operator_type, username, 
+      user_real_name, dept_name, oper_url, 
+      oper_ip, oper_location, oper_param, 
+      json_result, status, error_msg, 
+      oper_time)
+    values (#{title,jdbcType=VARCHAR}, #{businessType,jdbcType=INTEGER}, #{methodName,jdbcType=VARCHAR}, 
+      #{requestMethod,jdbcType=VARCHAR}, #{operatorType,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, 
+      #{userRealName,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{operUrl,jdbcType=VARCHAR}, 
+      #{operIp,jdbcType=VARCHAR}, #{operLocation,jdbcType=VARCHAR}, #{operParam,jdbcType=VARCHAR}, 
+      #{jsonResult,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{errorMsg,jdbcType=VARCHAR}, 
+      #{operTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.exercise.security.model.SysOperLog">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sys_oper_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        title,
+      </if>
+      <if test="businessType != null">
+        business_type,
+      </if>
+      <if test="methodName != null">
+        method_name,
+      </if>
+      <if test="requestMethod != null">
+        request_method,
+      </if>
+      <if test="operatorType != null">
+        operator_type,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="userRealName != null">
+        user_real_name,
+      </if>
+      <if test="deptName != null">
+        dept_name,
+      </if>
+      <if test="operUrl != null">
+        oper_url,
+      </if>
+      <if test="operIp != null">
+        oper_ip,
+      </if>
+      <if test="operLocation != null">
+        oper_location,
+      </if>
+      <if test="operParam != null">
+        oper_param,
+      </if>
+      <if test="jsonResult != null">
+        json_result,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="errorMsg != null">
+        error_msg,
+      </if>
+      <if test="operTime != null">
+        oper_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=INTEGER},
+      </if>
+      <if test="methodName != null">
+        #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="requestMethod != null">
+        #{requestMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorType != null">
+        #{operatorType,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userRealName != null">
+        #{userRealName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptName != null">
+        #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="operUrl != null">
+        #{operUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="operIp != null">
+        #{operIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operLocation != null">
+        #{operLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="operParam != null">
+        #{operParam,jdbcType=VARCHAR},
+      </if>
+      <if test="jsonResult != null">
+        #{jsonResult,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null">
+        #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="operTime != null">
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.exercise.security.model.SysOperLogExample" resultType="java.lang.Long">
+    select count(*) from sys_oper_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sys_oper_log
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessType != null">
+        business_type = #{record.businessType,jdbcType=INTEGER},
+      </if>
+      <if test="record.methodName != null">
+        method_name = #{record.methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestMethod != null">
+        request_method = #{record.requestMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operatorType != null">
+        operator_type = #{record.operatorType,jdbcType=INTEGER},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userRealName != null">
+        user_real_name = #{record.userRealName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptName != null">
+        dept_name = #{record.deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operUrl != null">
+        oper_url = #{record.operUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operIp != null">
+        oper_ip = #{record.operIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operLocation != null">
+        oper_location = #{record.operLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operParam != null">
+        oper_param = #{record.operParam,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jsonResult != null">
+        json_result = #{record.jsonResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.errorMsg != null">
+        error_msg = #{record.errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operTime != null">
+        oper_time = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sys_oper_log
+    set id = #{record.id,jdbcType=BIGINT},
+      title = #{record.title,jdbcType=VARCHAR},
+      business_type = #{record.businessType,jdbcType=INTEGER},
+      method_name = #{record.methodName,jdbcType=VARCHAR},
+      request_method = #{record.requestMethod,jdbcType=VARCHAR},
+      operator_type = #{record.operatorType,jdbcType=INTEGER},
+      username = #{record.username,jdbcType=VARCHAR},
+      user_real_name = #{record.userRealName,jdbcType=VARCHAR},
+      dept_name = #{record.deptName,jdbcType=VARCHAR},
+      oper_url = #{record.operUrl,jdbcType=VARCHAR},
+      oper_ip = #{record.operIp,jdbcType=VARCHAR},
+      oper_location = #{record.operLocation,jdbcType=VARCHAR},
+      oper_param = #{record.operParam,jdbcType=VARCHAR},
+      json_result = #{record.jsonResult,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      error_msg = #{record.errorMsg,jdbcType=VARCHAR},
+      oper_time = #{record.operTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.exercise.security.model.SysOperLog">
+    update sys_oper_log
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        business_type = #{businessType,jdbcType=INTEGER},
+      </if>
+      <if test="methodName != null">
+        method_name = #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="requestMethod != null">
+        request_method = #{requestMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorType != null">
+        operator_type = #{operatorType,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userRealName != null">
+        user_real_name = #{userRealName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptName != null">
+        dept_name = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="operUrl != null">
+        oper_url = #{operUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="operIp != null">
+        oper_ip = #{operIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operLocation != null">
+        oper_location = #{operLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="operParam != null">
+        oper_param = #{operParam,jdbcType=VARCHAR},
+      </if>
+      <if test="jsonResult != null">
+        json_result = #{jsonResult,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null">
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="operTime != null">
+        oper_time = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.exercise.security.model.SysOperLog">
+    update sys_oper_log
+    set title = #{title,jdbcType=VARCHAR},
+      business_type = #{businessType,jdbcType=INTEGER},
+      method_name = #{methodName,jdbcType=VARCHAR},
+      request_method = #{requestMethod,jdbcType=VARCHAR},
+      operator_type = #{operatorType,jdbcType=INTEGER},
+      username = #{username,jdbcType=VARCHAR},
+      user_real_name = #{userRealName,jdbcType=VARCHAR},
+      dept_name = #{deptName,jdbcType=VARCHAR},
+      oper_url = #{operUrl,jdbcType=VARCHAR},
+      oper_ip = #{operIp,jdbcType=VARCHAR},
+      oper_location = #{operLocation,jdbcType=VARCHAR},
+      oper_param = #{operParam,jdbcType=VARCHAR},
+      json_result = #{jsonResult,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      error_msg = #{errorMsg,jdbcType=VARCHAR},
+      oper_time = #{operTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

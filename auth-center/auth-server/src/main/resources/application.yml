@@ -1,0 +1,65 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: oauth2-server
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  datasource:
+    druid:
+      initial-size: 5 #连接池初始化大小
+      min-idle: 10 #最小空闲连接数
+      max-active: 20 #最大连接数
+      web-stat-filter:
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" #不统计这些请求数据
+      stat-view-servlet: #访问监控网页的登录用户名和密码
+        login-username: druid
+        login-password: my-druid
+  main:
+    allow-bean-definition-overriding: true
+
+
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
+
+
+project:
+  #资源标识
+  resourceId: auth-server
+  #授权标识
+  scope: ROLE_API
+
+
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  tokenHead: 'Bearer '  #JWT负载中拿到开头
+  secretKey: auth-server@123456 #JWT加解密使用的密钥
+  expiration: 7200 #JWT的超期限时间(60*60*2) 2小时
+  refresh:
+    expiration: 259200 #JWT的超期限时间(60*60*24*3) 3天
+
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - "/swagger-ui.html"
+      - "/swagger-resources/**"
+      - "/swagger/**"
+      - "/webjars/springfox-swagger-ui/**"
+      - "/v2/api-docs"
+      - "/**/swagger-ui.html"
+      - "/**/swagger-resources/**"
+      - "/**/swagger/**"
+      - "/**/webjars/springfox-swagger-ui/**"
+      - "/**/v2/api-docs"
+      - "/**/*.js"
+      - "/**/*.css"
+      - "/**/*.png"
+      - "/**/*.ico"
+      - "/actuator/**"
+      - "/druid/**"
+      - "/login"
+      - "/oauth/check_token"
+      - "/oauth/token"
+      - "/rsa/publicKey"

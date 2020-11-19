@@ -1,0 +1,12 @@
+#端口
+server:
+  port: 8103
+
+spring:
+  application:
+    name: gateway-server
+  profiles:
+    # 指定配置
+    active: satellite
+  main:
+    allow-bean-definition-overriding: true

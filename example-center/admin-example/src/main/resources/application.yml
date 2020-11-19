@@ -1,0 +1,94 @@
+# 项目相关配置
+project-config:
+  # 名称
+  name: admin
+  # 版本
+  version: 1.0.0
+  # 版权年份
+  copyrightYear: 2020
+  # 实例演示开关
+  demoEnabled: true
+  # 文件路径 示例（ Windows配置C:/uploadPath，Linux配置 /home/uploadPath）
+  profile: /uploadPath
+  # 获取ip地址开关
+  addressEnabled: false
+  # 验证码类型 math 数组计算 char 字符验证
+  captchaType: math
+
+spring:
+  application:
+    name: admin
+  profiles:
+    active: dev #默认为开发环境
+  servlet:
+    multipart:
+      enabled: true #开启文件上传
+      max-file-size: 10MB #限制文件上传大小为10M
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+
+  # redis 配置
+  redis:
+    # 地址
+    host: localhost
+    # 端口，默认为6379
+    port: 6379
+    # 密码
+    password:
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池中的最小空闲连接
+        min-idle: 0
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池的最大数据库连接数
+        max-active: 8
+        # #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
+
+securityconfig:
+  #安全认证
+  auth:
+    # 请求头 - token
+    requestHeader: Authorization
+    # token过期时间（分钟）
+    tokenExpireTime: 120
+    # 用户默认密码
+    defaultPwd: 123456
+    #    # 密码加密 盐值
+    #    salt: PytMg
+    #    # 密码相关 通过SHA1对密码进行编码
+    #    hashIterations: 1
+    # 用户选择保存登录状态对应token过期时间（天）, 暂时未实现
+    saveLoginTime: 7
+    # 限制用户登陆错误次数（次）, 暂时未实现
+    loginTimeLimit: 10
+    # 错误超过次数后多少分钟后才能继续登录（分钟）, 暂时未实现
+    loginAfterTime: 10
+    ignoreUrls:
+      - "/swagger-ui.html"
+      - "/swagger-resources/**"
+      - "/swagger/**"
+      - "/webjars/springfox-swagger-ui/**"
+      - "/**/v2/api-docs"
+      - "/**/*.js"
+      - "/**/*.css"
+      - "/**/*.png"
+      - "/**/*.ico"
+      - "/actuator/**"
+      - "/druid/**"
+      - "/login"
+      - "/socket/**"
+
+project:
+  #资源标识
+  resourceId: admin
+  #授权标识
+  scope: ROLE_API
