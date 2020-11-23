@@ -1,12 +1,12 @@
 package com.exercise.security.service.impl;
 
-import com.exercise.security.service.RoleService;
-import com.exercise.security.service.RoleUserService;
-import com.exercise.security.service.SystemUserService;
 import com.github.pagehelper.PageHelper;
+import com.google.protobuf.Api;
+import com.exercise.common.core.api.CommonResult;
 import com.exercise.common.core.api.datatable.RequestDTO;
 import com.exercise.common.core.api.datatable.ResultDTO;
 import com.exercise.common.core.exception.ApiException;
+import com.exercise.security.common.MyConstrants;
 import com.exercise.security.common.Myproperties;
 import com.exercise.security.dto.UserPasswordPara;
 import com.exercise.security.mapper.SysUserMapper;
@@ -14,6 +14,9 @@ import com.exercise.security.model.SysRole;
 import com.exercise.security.model.SysUser;
 import com.exercise.security.model.SysUserExample;
 import com.exercise.security.model.SysUserType;
+import com.exercise.security.service.RoleService;
+import com.exercise.security.service.RoleUserService;
+import com.exercise.security.service.SystemUserService;
 import com.exercise.security.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -152,7 +155,7 @@ public class SystemUserServiceImpl implements SystemUserService {
         SysUserExample.Criteria criteria = example.createCriteria();
         criteria.andUserTypeIdEqualTo(record.getId());
 
-        return updateByExample(updateData, example);
+        return mapper.updateByExampleSelective(updateData, example);
     }
 
     @Override

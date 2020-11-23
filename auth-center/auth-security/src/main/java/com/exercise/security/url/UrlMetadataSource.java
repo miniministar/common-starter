@@ -3,9 +3,11 @@ package com.exercise.security.url;
 import cn.hutool.core.util.StrUtil;
 import com.exercise.security.common.MyConstrants;
 import com.exercise.security.common.Myproperties;
-import com.exercise.security.model.SysRole;
 import com.exercise.security.dao.UserDao;
 import com.exercise.security.model.SysMenu;
+import com.exercise.security.model.SysRole;
+import com.exercise.security.service.MenuService;
+import com.exercise.security.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -30,10 +32,13 @@ import java.util.List;
 public class UrlMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
-    Myproperties myProperties;
-
+    private Myproperties myProperties;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private MenuService menuService;
+    @Autowired
+    private RoleService roleService;
 
     PathMatcher pathMatcher =  new AntPathMatcher();
 
@@ -59,12 +64,15 @@ public class UrlMetadataSource implements FilterInvocationSecurityMetadataSource
             }
         }
 
-        // 数据库中url对应菜单
-        SysMenu permission = userDao.selectMenu(requestUrl);
+        // 数据库中url对应菜单  todo 一个接口地址对应一个菜单，一个接口不可对应多个菜单
+        SysMenu permission = menuService.selectMenuByCache(requestUrl);
+        //userDao.selectMenu(requestUrl);
         // 获取该url所对应的权限
         if (permission != null ) {
             // 对应角色权限
-            List<SysRole> permissions = userDao.selectRoleByMenuId(permission.getId());
+            List<SysRole> permissions = roleService.selectRoleByMenuIdFormCache(permission.getId());
+
+//            List<SysRole> permissions = userDao.selectRoleByMenuId(permission.getId());
             List<String> roles = new LinkedList<>();
             if (!CollectionUtils.isEmpty(permissions)){
                 permissions.forEach( e -> {

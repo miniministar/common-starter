@@ -2,6 +2,7 @@ package com.exercise.security.service;
 
 import com.exercise.common.core.api.datatable.RequestDTO;
 import com.exercise.common.core.api.datatable.ResultDTO;
+import com.exercise.security.model.SysMenu;
 import com.exercise.security.model.SysRoleMenu;
 import com.exercise.security.model.SysRoleMenuExample;
 
@@ -30,4 +31,6 @@ public interface RoleMenService {
     int deleteByRoleId(Long roleId);
 
     long countRoleMenu(Long roleId);
+
+    void setRoleMenuCache(Long roleId, List<SysMenu> menus);
 }

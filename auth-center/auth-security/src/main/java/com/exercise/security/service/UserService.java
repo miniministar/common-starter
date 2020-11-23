@@ -11,4 +11,8 @@ public interface UserService extends UserDetailsService {
     SysUser selectByUsername(String username);
 
     String geneJwt(String roleCodes, String username);
+
+    SecurityUser getUserForCache(String username);
+
+    boolean setLoginSuccessCache(SecurityUser securityUser);
 }

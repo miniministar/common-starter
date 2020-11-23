@@ -1,22 +1,25 @@
 package com.exercise.security.service.impl;
 
+import com.exercise.common.component.cache.CacheService;
+import com.exercise.common.core.api.datatable.RequestDTO;
+import com.exercise.common.core.api.datatable.ResultDTO;
+import com.exercise.common.core.constant.Constants;
+import com.exercise.common.core.exception.ApiException;
+import com.exercise.security.mapper.SysRoleMapper;
 import com.exercise.security.model.*;
 import com.exercise.security.service.MenuService;
 import com.exercise.security.service.RoleMenService;
 import com.exercise.security.service.RoleService;
 import com.github.pagehelper.PageHelper;
-import com.exercise.common.core.api.datatable.RequestDTO;
-import com.exercise.common.core.api.datatable.ResultDTO;
-import com.exercise.common.core.exception.ApiException;
-import com.exercise.security.mapper.SysRoleMapper;
-import com.exercise.security.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +31,8 @@ public class RoleServiceImpl implements RoleService {
     private RoleMenService roleMenService;
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private CacheService cacheService;
 
     @Override
     public long countByExample(SysRoleExample example) {
@@ -103,7 +108,10 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public int updateByPrimaryKeySelective(SysRole record) {
-        return mapper.updateByPrimaryKeySelective(record);
+        int i = mapper.updateByPrimaryKeySelective(record);
+        SysRole role = mapper.selectByPrimaryKey(record.getId());
+        setRoleCache(role);
+        return i;
     }
 
     @Override
@@ -137,6 +145,9 @@ public class RoleServiceImpl implements RoleService {
     public int setMenu(SysRole entity) {
         if(entity == null) throw new ApiException("参数为空");
         if(entity.getId() == null) throw new ApiException("角色id不能为空");
+
+        roleMenService.setRoleMenuCache(entity.getId(), entity.getMenus());
+
         int i = roleMenService.deleteByRoleId(entity.getId());
 
         List<SysMenu> menus = entity.getMenus();
@@ -149,4 +160,56 @@ public class RoleServiceImpl implements RoleService {
         }
         return i;
     }
+
+    @Override
+    public List<SysRole> selectRoleByMenuIdFormCache(Long menuId) {
+        boolean hasKey = cacheService.hasKey(Constants.MENU_ID_ROLES + menuId);
+        List<SysRole> list = new ArrayList<>();
+        if(hasKey) {
+            Set<Long> roleIds = cacheService.getCacheObject(Constants.MENU_ID_ROLES + menuId);
+            for (Long roleId: roleIds ) {
+                SysRole role = null;
+                if(cacheService.hasKey(Constants.ROLE_ID + roleId)){
+                    role = cacheService.getCacheObject(Constants.ROLE_ID + roleId);
+                }else {
+                    role = mapper.selectByPrimaryKey(roleId);
+                    setRoleCache(role);
+                }
+                if(role != null)
+                    list.add(role);
+            }
+        }else {
+            Set<Long> roIds = new HashSet<>();
+            list = selectRolesByMenuId(menuId);
+            if(!CollectionUtils.isEmpty(list)) {
+                for (SysRole role: list) {
+                    roIds.add(role.getId());
+                    setRoleCache(role);
+                }
+            }
+            cacheService.setCacheObject(Constants.MENU_ID_ROLES + menuId, roIds);
+        }
+        return list;
+    }
+
+    public List<SysRole> selectRolesByMenuId(Long menuId) {
+        SysRoleMenuExample example = new SysRoleMenuExample();
+        SysRoleMenuExample.Criteria criteria = example.createCriteria();
+        criteria.andMenuIdEqualTo(menuId);
+        List<SysRoleMenu> sysRoleMenus = roleMenService.selectByExample(example);
+        if(CollectionUtils.isEmpty(sysRoleMenus)) return null;
+
+        SysRoleExample example1 = new SysRoleExample();
+        SysRoleExample.Criteria criteria1 = example1.createCriteria();
+        criteria1.andIdIn(sysRoleMenus.stream().map(SysRoleMenu::getRoleId).collect(Collectors.toList()));
+        return mapper.selectByExample(example1);
+    }
+
+    public void setRoleCache(SysRole role) {
+        if(role!=null) {
+            cacheService.setCacheObject(Constants.ROLE_ID + role.getId(), role);
+        }
+    }
+
+
 }

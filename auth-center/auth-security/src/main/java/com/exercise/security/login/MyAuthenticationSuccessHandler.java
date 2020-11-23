@@ -1,5 +1,7 @@
 package com.exercise.security.login;
 
+import com.exercise.common.core.api.CommonResult;
+import com.exercise.common.core.constant.Constants;
 import com.exercise.security.common.MyConstrants;
 import com.exercise.security.dto.SecurityUser;
 import com.exercise.security.manager.AsyncFactory;
@@ -7,8 +9,6 @@ import com.exercise.security.manager.AsyncManager;
 import com.exercise.security.model.SysUser;
 import com.exercise.security.service.UserService;
 import com.exercise.security.util.ResponseUtils;
-import com.exercise.common.core.api.CommonResult;
-import com.exercise.common.core.constant.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -36,6 +36,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         //认证成功后返回用户相关信息，菜单和用户信息
 
         SecurityUser securityUser = ((SecurityUser) auth.getPrincipal());
+        userService.setLoginSuccessCache(securityUser);
 
         SysUser currentUserInfo = securityUser.getCurrentUserInfo();
         currentUserInfo.setPassword("");

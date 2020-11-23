@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,19 +20,22 @@ import java.util.StringJoiner;
  */
 @Data
 @Slf4j
-public class SecurityUser implements UserDetails {
+public class SecurityUser implements UserDetails, Serializable {
+
+
+    private static final long serialVersionUID = 4019387724307124819L;
     /**
      * 当前登录用户
      */
-    private transient SysUser currentUserInfo;
+    private SysUser currentUserInfo;
     /**
      * 角色
      */
-    private transient List<SysRole> roleList;
+    private List<SysRole> roleList;
     /**
      * 当前用户所拥有角色代码
      */
-    private transient String roleCodes;
+    private String roleCodes;
 
     private String token;
 

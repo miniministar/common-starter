@@ -33,4 +33,10 @@ public interface RoleService {
     List<SysMenu> getRoleAllMenus(Long roleId);
 
     List<SysMenu> getRolesAllMenus(List<Long> roleIds);
+
+    List<SysRole> selectRoleByMenuIdFormCache(Long menuId);
+
+    void setRoleCache(SysRole role);
+
+    List<SysRole> selectRolesByMenuId(Long menuId);
 }

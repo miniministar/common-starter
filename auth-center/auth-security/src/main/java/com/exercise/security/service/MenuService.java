@@ -1,5 +1,6 @@
 package com.exercise.security.service;
 
+
 import com.exercise.common.core.api.datatable.RequestDTO;
 import com.exercise.common.core.api.datatable.ResultDTO;
 import com.exercise.security.model.SysMenu;
@@ -30,4 +31,10 @@ public interface MenuService {
     List<SysMenu> selectTree(RequestDTO<SysMenu> params);
 
     List<SysMenu> constructTree(List<SysMenu> list);
+
+    SysMenu selectMenuByCache(String path);
+
+    SysMenu selectByPath(String path);
+
+    void setMenuCache(SysMenu menu);
 }

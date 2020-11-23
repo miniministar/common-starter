@@ -1,5 +1,7 @@
 package com.exercise.security.service.impl;
 
+import com.exercise.common.component.cache.CacheService;
+import com.exercise.common.core.constant.Constants;
 import com.exercise.security.common.MyConstrants;
 import com.exercise.security.common.Myproperties;
 import com.exercise.security.dao.UserDao;
@@ -22,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 自定义userDetailsService - 认证用户详情
@@ -36,6 +39,8 @@ public class UserDetailsServiceImpl implements UserService {
     private UserDao userDao;
     @Autowired
     private Myproperties myproperties;
+    @Autowired
+    private CacheService cacheService;
 
     /***
      * 根据账号获取用户信息
@@ -52,18 +57,23 @@ public class UserDetailsServiceImpl implements UserService {
             throw new UsernameNotFoundException("用户名不存在！");
         }
         // 返回UserDetails实现类
-        return new SecurityUser(user, getUserRoles(user.getId()));
+        return constructLoginSecurityUser(user);
     }
 
     public SecurityUser getUserByUsername(String username) {
         SysUser user = selectByUsername(username);
+        return constructLoginSecurityUser(user);
+    }
+
+    private SecurityUser constructLoginSecurityUser(SysUser user) {
+        if(user == null) return null;
         List<SysRole> roles =  getUserRoles(user.getId());
         SysRole loginRole = new SysRole();
         loginRole.setCode(MyConstrants.ROLE_LOGIN);
         roles.add(loginRole);
-
-        return user != null ? new SecurityUser(user, roles) : null;
+        return new SecurityUser(user, roles);
     }
+
 
     /**
      * 根据用户id获取角色权限信息
@@ -119,4 +129,28 @@ public class UserDetailsServiceImpl implements UserService {
         return userList.get(0);
     }
 
+
+    @Override
+    public SecurityUser getUserForCache(String username) {
+        Long userId =  cacheService.getCacheObject(Constants.USER_USERNAME_KEY + username);
+        SecurityUser user = null;
+        if(userId != null) {
+            user =  cacheService.getCacheObject(Constants.USER_ID_KEY + userId);
+        }
+        if(user == null){
+            user = getUserByUsername(username);
+            setLoginSuccessCache(user);
+        }
+        return user;
+    }
+
+    @Override
+    public boolean setLoginSuccessCache(SecurityUser user) {
+        if(user == null) return false;
+        int expireTime = myproperties.getAuth().getTokenExpireTime() + 1;
+        Long userId = user.getCurrentUserInfo().getId();
+        cacheService.setCacheObject(Constants.USER_USERNAME_KEY + user.getUsername(), userId , expireTime, TimeUnit.MINUTES);
+        cacheService.setCacheObject(Constants.USER_ID_KEY + userId, user, expireTime, TimeUnit.MINUTES);
+        return true;
+    }
 }

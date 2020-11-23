@@ -1,9 +1,9 @@
 package com.exercise.security.filter;
 
 import com.exercise.security.common.MyConstrants;
-import com.exercise.security.service.impl.UserDetailsServiceImpl;
 import com.exercise.security.dto.SecurityUser;
 import com.exercise.security.login.MyAuthEntryPoint;
+import com.exercise.security.service.impl.UserDetailsServiceImpl;
 import com.exercise.security.util.MyMultiReadHttpServletRequest;
 import com.exercise.security.util.MyMultiReadHttpServletResponse;
 import io.jsonwebtoken.Claims;
@@ -70,7 +70,7 @@ public class MyAuthFilter extends OncePerRequestFilter {
                 // JWT相关end ===========================================
 
                 // 检查token
-                SecurityUser securityUser = userDetailsService.getUserByUsername(claims.getSubject());
+                SecurityUser securityUser = userDetailsService.getUserForCache(claims.getSubject());
                 if (securityUser == null || securityUser.getCurrentUserInfo() == null) {
                     throw new UsernameNotFoundException("用户名不存在！");
                 }

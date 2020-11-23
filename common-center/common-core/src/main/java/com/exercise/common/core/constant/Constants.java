@@ -59,7 +59,45 @@ public class Constants
      * 登录用户 redis key
      */
     public static final String LOGIN_TOKEN_KEY = "login_tokens:";
-    
+
+    /**
+     * 用户信息 redis key
+     */
+    public static final String USER_USERNAME_KEY = "user:username:";
+
+    /**
+     * 用户信息 redis key
+     */
+    public static final String USER_ID_KEY = "user:id:";
+
+    /**
+     * 菜单信息 redis key
+     * 存菜单ID
+     */
+    public static final String MENU_PATH_KEY = "menu:path:";
+
+    /**
+     * 菜单信息 redis key
+     * 存菜单信息
+     */
+    public static final String MENU_ID_KEY = "menu:id:";
+
+    /**
+     * 菜单对应的角色信息 redis key
+     * 菜单对应的角色id
+     */
+    public static final String MENU_ID_ROLES = "menu:id:roles:";
+
+    /**
+     * 角色对应的菜单id redis key
+     */
+    public static final String ROLE_ID_MENUS = "role:id:menus:";
+
+    /**
+     * 角色信息 redis key
+     */
+    public static final String ROLE_ID = "role:id:";
+
     /**
      * 防重提交 redis key
      */
