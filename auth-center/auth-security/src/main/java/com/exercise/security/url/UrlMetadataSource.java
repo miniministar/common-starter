@@ -78,6 +78,8 @@ public class UrlMetadataSource implements FilterInvocationSecurityMetadataSource
                 permissions.forEach( e -> {
                     roles.add(e.getCode());
                 });
+            }else{
+                roles.add("nobodyHaveThisMenu");
             }
             String[] strings = roles.toArray(new String[roles.size()]);
             // 保存该url对应角色权限信息

@@ -93,8 +93,16 @@ public class RoleMenuServiceImpl implements RoleMenService {
         return mapper.deleteByExample(example);
     }
 
-    public void setRoleMenuCache(Long roleId, List<SysMenu> menus) {
-        Set<Long> menuIds = cacheService.getCacheObject(Constants.ROLE_ID_MENUS + roleId);
+     public void setRoleMenuCache(Long roleId, List<SysMenu> menus) {
+        Set<Long> menuIds = null;
+        if(cacheService.hasKey(Constants.ROLE_ID_MENUS + roleId)) {
+            menuIds = cacheService.getCacheObject(Constants.ROLE_ID_MENUS + roleId);
+        }else {
+            List<Long> list = selectRoleMenuIds(roleId);
+            if(list != null)
+            menuIds = new HashSet<>( list );
+        }
+
         if(!CollectionUtils.isEmpty(menuIds)) {
             for (Long menuId: menuIds ) {
                 Set<Long> roleIds = cacheService.getCacheObject(Constants.MENU_ID_ROLES + menuId);
@@ -110,12 +118,24 @@ public class RoleMenuServiceImpl implements RoleMenService {
         if(!CollectionUtils.isEmpty(menus)) newMenuIds = menus.stream().map(SysMenu::getId).collect(Collectors.toSet());
         cacheService.setCacheObject(Constants.ROLE_ID_MENUS + roleId, newMenuIds);
         for (Long menuId: newMenuIds ) {
-            Set<Long> roleIds = cacheService.getCacheObject(Constants.MENU_ID_ROLES + menuId);
-            if(!CollectionUtils.isEmpty(roleIds)) {
-                roleIds.add(roleId);
-                cacheService.setCacheObject(Constants.MENU_ID_ROLES + menuId, roleIds);
+            Set<Long> roleIds = null;
+            if(!cacheService.hasKey(Constants.MENU_ID_ROLES + menuId)) {
+                roleIds = new HashSet<>();
+            }else {
+                roleIds = cacheService.getCacheObject(Constants.MENU_ID_ROLES + menuId);
             }
+            roleIds.add(roleId);
+            cacheService.setCacheObject(Constants.MENU_ID_ROLES + menuId, roleIds);
         }
+    }
+
+    public List<Long> selectRoleMenuIds(Long roleId) {
+        SysRoleMenuExample example = new SysRoleMenuExample();
+        SysRoleMenuExample.Criteria criteria = example.createCriteria();
+        criteria.andRoleIdEqualTo(roleId);
+        List<SysRoleMenu> sysRoleMenus = mapper.selectByExample(example);
+        if(sysRoleMenus == null) return  null;
+        return sysRoleMenus.stream().map(SysRoleMenu::getMenuId).collect(Collectors.toList());
     }
 
     @Override

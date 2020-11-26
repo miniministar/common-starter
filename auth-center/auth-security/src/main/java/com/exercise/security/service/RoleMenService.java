@@ -33,4 +33,6 @@ public interface RoleMenService {
     long countRoleMenu(Long roleId);
 
     void setRoleMenuCache(Long roleId, List<SysMenu> menus);
+
+    List<Long> selectRoleMenuIds(Long roleId);
 }
