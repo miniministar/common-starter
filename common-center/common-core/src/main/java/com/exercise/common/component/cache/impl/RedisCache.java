@@ -1,6 +1,7 @@
 package com.exercise.common.component.cache.impl;
 
 import com.exercise.common.component.cache.CacheService;
+import com.exercise.common.component.config.ProjectConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,7 +16,12 @@ public class RedisCache implements CacheService {
 
     @Autowired
     public RedisTemplate redisTemplate;
+    @Autowired
+    public ProjectConfig project;
 
+    private String getProjectPrefixKey() {
+        return project.getName() + ":";
+    }
     /**
      * 缓存基本的对象，Integer、String、实体类等
      *
@@ -24,7 +30,7 @@ public class RedisCache implements CacheService {
      */
     public <T> void setCacheObject(final String key, final T value)
     {
-        redisTemplate.opsForValue().set(key, value);
+        redisTemplate.opsForValue().set( getProjectPrefixKey() + key, value);
     }
 
     /**
@@ -37,7 +43,7 @@ public class RedisCache implements CacheService {
      */
     public <T> void setCacheObject(final String key, final T value, final Integer timeout, final TimeUnit timeUnit)
     {
-        redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
+        redisTemplate.opsForValue().set(getProjectPrefixKey() + key, value, timeout, timeUnit);
     }
 
     /**
@@ -49,7 +55,7 @@ public class RedisCache implements CacheService {
      */
     public boolean expire(final String key, final long timeout)
     {
-        return expire(key, timeout, TimeUnit.SECONDS);
+        return expire(getProjectPrefixKey() + key, timeout, TimeUnit.SECONDS);
     }
 
     /**
@@ -62,7 +68,7 @@ public class RedisCache implements CacheService {
      */
     public boolean expire(final String key, final long timeout, final TimeUnit unit)
     {
-        return redisTemplate.expire(key, timeout, unit);
+        return redisTemplate.expire(getProjectPrefixKey() + key, timeout, unit);
     }
 
     /**
@@ -74,7 +80,7 @@ public class RedisCache implements CacheService {
     public <T> T getCacheObject(final String key)
     {
         ValueOperations<String, T> operation = redisTemplate.opsForValue();
-        return operation.get(key);
+        return operation.get(getProjectPrefixKey() + key);
     }
 
     /**
@@ -84,7 +90,7 @@ public class RedisCache implements CacheService {
      */
     public boolean deleteObject(final String key)
     {
-        return redisTemplate.delete(key);
+        return redisTemplate.delete(getProjectPrefixKey() + key);
     }
 
     /**
@@ -107,14 +113,14 @@ public class RedisCache implements CacheService {
      */
     public <T> long setCacheList(final String key, final List<T> dataList)
     {
-        Long count = redisTemplate.opsForList().rightPushAll(key, dataList);
+        Long count = redisTemplate.opsForList().rightPushAll(getProjectPrefixKey() + key, dataList);
         return count == null ? 0 : count;
     }
 
     @Override
     public <T> long setCacheList(String key, T... values) {
 
-        Long count = redisTemplate.opsForList().rightPushAll(key, values);
+        Long count = redisTemplate.opsForList().rightPushAll(getProjectPrefixKey() + key, values);
         return count == null ? 0 : count;
     }
 
@@ -126,7 +132,7 @@ public class RedisCache implements CacheService {
      */
     public <T> List<T> getCacheList(final String key)
     {
-        return redisTemplate.opsForList().range(key, 0, -1);
+        return redisTemplate.opsForList().range(getProjectPrefixKey() + key, 0, -1);
     }
 
     /**
@@ -139,13 +145,13 @@ public class RedisCache implements CacheService {
     public <T> long setCacheSet(final String key, final Set<T> dataSet)
     {
         if(dataSet == null) return  0;
-        Long count = redisTemplate.opsForSet().add(key, dataSet.toArray());
+        Long count = redisTemplate.opsForSet().add(getProjectPrefixKey() + key, dataSet.toArray());
         return count == null ? 0 : count;
     }
 
     @Override
     public <T> long setCacheSet(String key, T... values) {
-        Long count = redisTemplate.opsForSet().add(key, values);
+        Long count = redisTemplate.opsForSet().add(getProjectPrefixKey() + key, values);
         return count == null ? 0 : count;
     }
 
@@ -157,7 +163,7 @@ public class RedisCache implements CacheService {
      */
     public <T> Set<T> getCacheSet(final String key)
     {
-        return redisTemplate.opsForSet().members(key);
+        return redisTemplate.opsForSet().members(getProjectPrefixKey() + key);
     }
 
     /**
@@ -169,7 +175,7 @@ public class RedisCache implements CacheService {
     public <T> void setCacheMap(final String key, final Map<String, T> dataMap)
     {
         if (dataMap != null) {
-            redisTemplate.opsForHash().putAll(key, dataMap);
+            redisTemplate.opsForHash().putAll(getProjectPrefixKey() + key, dataMap);
         }
     }
 
@@ -181,7 +187,7 @@ public class RedisCache implements CacheService {
      */
     public <T> Map<String, T> getCacheMap(final String key)
     {
-        return redisTemplate.opsForHash().entries(key);
+        return redisTemplate.opsForHash().entries(getProjectPrefixKey() + key);
     }
 
     /**
@@ -193,7 +199,7 @@ public class RedisCache implements CacheService {
      */
     public <T> void setCacheMapValue(final String key, final String hKey, final T value)
     {
-        redisTemplate.opsForHash().put(key, hKey, value);
+        redisTemplate.opsForHash().put(getProjectPrefixKey() + key, hKey, value);
     }
 
     /**
@@ -206,7 +212,7 @@ public class RedisCache implements CacheService {
     public <T> T getCacheMapValue(final String key, final String hKey)
     {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
-        return opsForHash.get(key, hKey);
+        return opsForHash.get(getProjectPrefixKey() + key, hKey);
     }
 
     /**
@@ -218,7 +224,7 @@ public class RedisCache implements CacheService {
      */
     public <T> List<T> getMultiCacheMapValue(final String key, final Collection<Object> hKeys)
     {
-        return redisTemplate.opsForHash().multiGet(key, hKeys);
+        return redisTemplate.opsForHash().multiGet(getProjectPrefixKey() + key, hKeys);
     }
 
     /**
@@ -233,6 +239,6 @@ public class RedisCache implements CacheService {
     }
 
     public boolean hasKey(String key) {
-        return redisTemplate.hasKey(key);
+        return redisTemplate.hasKey(getProjectPrefixKey() + key);
     }
 }

@@ -482,3 +482,41 @@ CREATE TABLE `sys_user_type` (
 -- ----------------------------
 INSERT INTO `sys_user_type` VALUES ('8', '技术部门', null, '2020-11-17 10:24:19', null);
 INSERT INTO `sys_user_type` VALUES ('9', '财务部门', null, '2020-11-17 10:24:29', null);
+
+DROP TABLE IF EXISTS `sys_dict_type`;
+CREATE TABLE `sys_dict_type` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典主键',
+  `dict_name` varchar(100) DEFAULT '' COMMENT '字典名称',
+  `dict_type` varchar(100) DEFAULT '' COMMENT '字典类型(编码)',
+  `dict_label` varchar(100) DEFAULT '' COMMENT '字典标签',
+  `status` char(1) DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) DEFAULT '' COMMENT '创建者',
+  `modify_by` varchar(64) DEFAULT '' COMMENT '更新者',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modify_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `dict_type` (`dict_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='字典类型表';
+
+DROP TABLE IF EXISTS `sys_dict_data`;
+CREATE TABLE `sys_dict_data` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `dict_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '字典编码',
+  `dict_sort` int(11) DEFAULT '0' COMMENT '字典排序',
+  `dict_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '' COMMENT '字典数据名称',
+  `dict_label` varchar(100) DEFAULT '' COMMENT '字典标签',
+  `dict_value` varchar(100) DEFAULT '' COMMENT '字典键值',
+  `dict_type` varchar(100) DEFAULT '' COMMENT '字典类型',
+  `css_class` varchar(100) DEFAULT NULL COMMENT '样式属性（其他样式扩展）',
+  `list_class` varchar(100) DEFAULT NULL COMMENT '表格回显样式',
+  `is_default` char(1) DEFAULT 'N' COMMENT '是否默认（Y是 N否）',
+  `status` char(1) DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) DEFAULT '' COMMENT '创建者',
+  `modify_by` varchar(64) DEFAULT '' COMMENT '更新者',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modify_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='字典数据表';
+

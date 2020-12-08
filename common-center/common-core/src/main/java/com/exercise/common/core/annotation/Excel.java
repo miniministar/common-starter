@@ -8,6 +8,37 @@ import java.math.BigDecimal;
 
 /**
  * 自定义导出Excel数据注解
+ * 1.导入模板
+ @RequestMapping("/importTemplate")
+ @ApiOperation(value="导入模板生成",notes="")
+ public CommonResult importTemplate() throws Exception {
+ ExcelUtil<GdFactorHistory> util = new ExcelUtil<GdFactorHistory>(GdFactorHistory.class);
+ return util.importTemplateExcel("影响因数");
+ }
+
+ * 2.导入数据 导入不分顺序，根据列导入
+ @MyLog(title = "影响因数管理", businessType = BusinessType.IMPORT)
+ @RequestMapping("/import")
+ @ApiOperation(value="导入",notes="先删除历史数据再重新导入，entity: 传入 类型，年度")
+ public CommonResult importData(@RequestParam(value="file") MultipartFile file, GdFactorHistory entity) throws Exception {
+
+ ExcelUtil<GdFactorHistory> util = new ExcelUtil<>(GdFactorHistory.class);
+ List<GdFactorHistory> list = util.importExcel(file.getInputStream() );
+ Integer count = service.importData(list, entity);
+ return CommonResult.success("导入成功" + count + "条数据");
+ }
+
+ * 3.导出数据
+ @MyLog(title = "影响因数管理", businessType = BusinessType.IMPORT)
+ @RequestMapping("export")
+ @ApiOperation(value="导出",notes="查询参数Filter")
+ public CommonResult export(@RequestBody RequestDTO<GdFactorHistory> params) {
+ List<GdFactorHistory> list = service.getList(params.getFilter());
+ ExcelUtil<GdFactorHistory> excelUtil = new ExcelUtil<>(GdFactorHistory.class);
+ return excelUtil.exportExcel(list, "影响因数");
+ }
+
+
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

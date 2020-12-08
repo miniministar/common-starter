@@ -200,7 +200,7 @@ public class MyLogAspect implements Ordered
         {
             for (int i = 0; i < paramsArray.length; i++)
             {
-                if (!isFilterObject(paramsArray[i]))
+                if (!isFilterObject(paramsArray[i]) && paramsArray[i] != null)
                 {
                     Object jsonObj = JSON.toJSON(paramsArray[i]);
                     params += jsonObj.toString() + " ";

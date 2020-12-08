@@ -37,10 +37,10 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.exercise.security.mapper"
                              targetProject="auth-center\auth-security\src\main\java"/>
         <!--生成全部表tableName设为%-->
-        <table tableName="sys_login_log">
+        <table tableName="sys_dict_type">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="sys_oper_log">
+        <table tableName="sys_dict_data">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 <!--        <table tableName="sys_%">-->

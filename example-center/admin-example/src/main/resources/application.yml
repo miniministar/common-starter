@@ -86,9 +86,3 @@ securityconfig:
       - "/druid/**"
       - "/login"
       - "/socket/**"
-
-project:
-  #资源标识
-  resourceId: admin
-  #授权标识
-  scope: ROLE_API
