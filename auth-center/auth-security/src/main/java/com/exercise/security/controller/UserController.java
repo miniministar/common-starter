@@ -1,7 +1,6 @@
 package com.exercise.security.controller;
 
 
-import com.exercise.security.service.SystemUserService;
 import com.exercise.common.core.annotation.MyLog;
 import com.exercise.common.core.api.CommonResult;
 import com.exercise.common.core.api.datatable.RequestDTO;
@@ -11,6 +10,7 @@ import com.exercise.common.core.validator.Create;
 import com.exercise.common.core.validator.Update;
 import com.exercise.security.dto.UserPasswordPara;
 import com.exercise.security.model.SysUser;
+import com.exercise.security.service.SystemUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,5 +85,12 @@ public class UserController {
     public CommonResult changePassword(@RequestBody @Validated UserPasswordPara input) {
         service.changePassword(input);
         return CommonResult.success("修改成功");
+    }
+
+    @RequestMapping("refreshToken")
+    @ApiOperation(value="刷新token", notes="")
+    public CommonResult<SysUser> refreshToken(){
+        SysUser currentUser = service.refreshToken();
+        return CommonResult.success(currentUser);
     }
 }

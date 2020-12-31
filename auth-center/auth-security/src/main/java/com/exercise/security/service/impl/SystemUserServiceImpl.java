@@ -1,5 +1,7 @@
 package com.exercise.security.service.impl;
 
+import com.exercise.security.dto.SecurityUser;
+import com.exercise.security.service.UserService;
 import com.github.pagehelper.PageHelper;
 import com.google.protobuf.Api;
 import com.exercise.common.core.api.CommonResult;
@@ -211,5 +213,19 @@ public class SystemUserServiceImpl implements SystemUserService {
         user.setPassword(encode( myproperties.getAuth().getDefaultPwd() ));
         mapper.updateByPrimaryKeySelective(user);
         return true;
+    }
+
+    @Autowired
+    private UserService userService;
+
+
+    @Override
+    public SysUser refreshToken() {
+        SysUser currentUser = SecurityUtil.getCurrentUser();
+        SecurityUser securityUser = userService.getUserForCache(currentUser.getUsername());
+        userService.setLoginSuccessCache(securityUser);
+        currentUser.setPassword("");
+        currentUser.setToken(MyConstrants.TOKEN_TYPE + " " + userService.geneJwt(securityUser.getRoleCodes(), currentUser.getUsername()));
+        return currentUser;
     }
 }

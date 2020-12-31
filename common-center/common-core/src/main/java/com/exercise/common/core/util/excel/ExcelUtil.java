@@ -288,7 +288,7 @@ public class ExcelUtil<T>
      */
     public CommonResult importTemplateExcel(String sheetName)
     {
-        this.init(null, sheetName, Excel.Type.IMPORT);
+        this.init(null, sheetName, Excel.Type.TEMPLATE);
         return exportExcel();
     }
 

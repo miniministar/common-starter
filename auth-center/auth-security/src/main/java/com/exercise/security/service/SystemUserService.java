@@ -46,4 +46,6 @@ public interface SystemUserService {
     SysUser selectByUsername(String username);
 
     boolean resetPassword(String username);
+
+    SysUser refreshToken();
 }
