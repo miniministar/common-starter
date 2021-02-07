@@ -103,7 +103,7 @@ public class UserDetailsServiceImpl implements UserService {
 //                .setExpiration(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 1000 * myproperties.getAuth().getTokenExpireTime()))
                 // 加密算法和密钥
-                .signWith(SignatureAlgorithm.HS512, MyConstrants.SALT)
+                .signWith(SignatureAlgorithm.HS512, myproperties.getAuth().getJwtSalt())
                 .compact();
         return jwt;
     }

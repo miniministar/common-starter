@@ -40,9 +40,105 @@ common-starter
 | JDK           | 1.8    | https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html |
 | Mysql         | 8.0.19 | https://www.mysql.com/                                       |
 
+### 部署说明
+1. pom依赖
+```java
+  <!--通用模块-->
+    <dependency>
+        <groupId>com.kaopudian</groupId>
+        <artifactId>common-core</artifactId>
+        <version>${kpd-common.version}</version>
+    </dependency>
+    <!--安全模块-->
+    <dependency>
+        <groupId>com.kaopudian</groupId>
+        <artifactId>auth-security</artifactId>
+        <version>${kpd-common.version}</version>
+    </dependency>
+```
+
+2. yml配置
+```$xslt
+# 项目相关配置
+project-config:
+  # 名称
+  name: xxx
+  # 版本
+  version: 1.0.0
+  # 版权年份
+  copyrightYear: 2021
+  # 实例演示开关
+  demoEnabled: true
+  # 文件路径 示例（ Windows配置C:/uploadPath，Linux配置 /home/uploadPath）
+  profile: /uploadPath
+  # 获取ip地址开关
+  addressEnabled: false
+  # 验证码类型 math 数组计算 char 字符验证
+  captchaType: math
+
+spring:
+  application:
+    name: zhanyigeli-api
+  profiles:
+    active: dev #默认为开发环境
+  servlet:
+    multipart:
+      enabled: true #开启文件上传
+      max-file-size: 1024MB #限制文件上传大小为10M
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
+
+securityconfig:
+  #安全认证
+  auth:
+    #jwt加密盐值
+    jwtSalt: PytMg@abc
+    # 请求头 - token
+    requestHeader: Authorization
+    # token过期时间（分钟）
+    tokenExpireTime: 120
+    # 用户默认密码
+    defaultPwd: 123456
+    #    # 密码加密 盐值
+    #    salt: PytMg
+    #    # 密码相关 通过SHA1对密码进行编码
+    #    hashIterations: 1
+    # 用户选择保存登录状态对应token过期时间（天）, 暂时未实现
+    saveLoginTime: 7
+    # 限制用户登陆错误次数（次）, 暂时未实现
+    loginTimeLimit: 10
+    # 错误超过次数后多少分钟后才能继续登录（分钟）, 暂时未实现
+    loginAfterTime: 10
+    ignoreUrls:
+      - "/swagger-ui.html"
+      - "/swagger-resources/**"
+      - "/swagger/**"
+      - "/webjars/springfox-swagger-ui/**"
+      - "/**/v2/api-docs"
+      - "/**/*.js"
+      - "/**/*.css"
+      - "/**/*.png"
+      - "/**/*.ico"
+      - "/actuator/**"
+      - "/druid/**"
+      - "/login"
+      - "/socket/**"
+```
+3. 项目结构
+
+   启动类必须扫描到com.kaopudian包
+
+   ![image-20210207143008149](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210207143008149.png)
+
 
 ### 测试
-启动后台，登陆接口 http://localhost:8111/admin/login
+启动后台，登陆接口 http://localhost:8111/login
 ```$xslt
 Content-Type application/json
 {

@@ -15,6 +15,10 @@ public class Myproperties {
     @Data
     public static class Auth {
         /**
+         * jwt加密盐值
+         */
+        private String jwtSalt = "PytMg";
+        /**
          * token过期时间（分钟）
          */
         private Integer tokenExpireTime;

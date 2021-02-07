@@ -1,6 +1,7 @@
 package com.exercise.security.filter;
 
 import com.exercise.security.common.MyConstrants;
+import com.exercise.security.common.Myproperties;
 import com.exercise.security.dto.SecurityUser;
 import com.exercise.security.login.MyAuthEntryPoint;
 import com.exercise.security.service.impl.UserDetailsServiceImpl;
@@ -9,6 +10,7 @@ import com.exercise.security.util.MyMultiReadHttpServletResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,8 @@ public class MyAuthFilter extends OncePerRequestFilter {
 
     @Autowired
     MyAuthEntryPoint entryPoint;
+    @Autowired
+    private Myproperties myproperties;
 
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -64,7 +68,7 @@ public class MyAuthFilter extends OncePerRequestFilter {
             if (StringUtils.isNotBlank(jwtToken)) {
                 // JWT相关start ===========================================
                 // 获取jwt中的信息
-                Claims claims = Jwts.parser().setSigningKey(MyConstrants.SALT).parseClaimsJws(jwtToken.replace(MyConstrants.TOKEN_TYPE, "")).getBody();
+                Claims claims = Jwts.parser().setSigningKey(myproperties.getAuth().getJwtSalt()).parseClaimsJws(jwtToken.replace(MyConstrants.TOKEN_TYPE, "")).getBody();
                 // 获取当前登录用户名
                 log.debug("当前登录用户名: " + claims.getSubject());
                 // JWT相关end ===========================================
@@ -82,15 +86,21 @@ public class MyAuthFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(wrappedRequest, wrappedResponse);
         }catch (BadCredentialsException e){
-
+            e.printStackTrace();
             SecurityContextHolder.clearContext();
             this.entryPoint.commence(wrappedRequest, response, e);
-
-        }catch (ExpiredJwtException e) {
+        }catch (SignatureException e) {
+            // jwt令牌验证失败
+            e.printStackTrace();
+            SecurityContextHolder.clearContext();
+            this.entryPoint.commence(wrappedRequest, response, null);
+        } catch (ExpiredJwtException e) {
             // jwt令牌过期
+            e.printStackTrace();
             SecurityContextHolder.clearContext();
             this.entryPoint.commence(wrappedRequest, response, null);
         } catch (AuthenticationException e) {
+            e.printStackTrace();
             SecurityContextHolder.clearContext();
             this.entryPoint.commence(wrappedRequest, response, e);
         } finally {
