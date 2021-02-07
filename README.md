@@ -134,7 +134,7 @@ securityconfig:
 
    启动类必须扫描到com.kaopudian包
 
-   ![image-20210207143008149](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210207143008149.png)
+   ![image](https://github.com/miniministar/common-starter/resources/images/image-20210207143008149.png)
 
 
 ### 测试
