@@ -132,7 +132,7 @@ securityconfig:
 ```
 3. 项目结构
 
-   启动类必须扫描到com.kaopudian包
+   启动类必须扫描到com.exercise包
 
    ![image](https://github.com/miniministar/common-starter/blob/master/resources/images/image-20210207143008149.png)
 
