@@ -104,8 +104,8 @@
                 <configuration>
                     <port>8085</port>
                     <!--上传war包的位置，除ip和端口外其他不变 -->
-                    <url>http://39.106.220.19:8111//manager/text</url>
-                    <path>/satellite-admin</path>
+                    <url>http://ip:8111//manager/text</url>
+                    <path>/xxx</path>
                     <username>tomcat</username>
                     <password>tomcat</password>
                 </configuration>
