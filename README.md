@@ -45,13 +45,13 @@ common-starter
 ```java
   <!--通用模块-->
     <dependency>
-        <groupId>com.kaopudian</groupId>
+        <groupId>com.exercise</groupId>
         <artifactId>common-core</artifactId>
         <version>${kpd-common.version}</version>
     </dependency>
     <!--安全模块-->
     <dependency>
-        <groupId>com.kaopudian</groupId>
+        <groupId>com.exercise</groupId>
         <artifactId>auth-security</artifactId>
         <version>${kpd-common.version}</version>
     </dependency>
